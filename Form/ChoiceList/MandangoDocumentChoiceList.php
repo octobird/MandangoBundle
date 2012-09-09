@@ -11,7 +11,7 @@
 
 namespace Mandango\MandangoBundle\Form\ChoiceList;
 
-use Symfony\Component\Form\Extension\Core\ChoiceList\ArrayChoiceList;
+use Symfony\Component\Form\Extension\Core\ChoiceList\SimpleChoiceList;
 use Mandango\Query;
 use Mandango\Mandango;
 
@@ -20,7 +20,7 @@ use Mandango\Mandango;
  *
  * @author Pablo Díez <pablodip@gmail.com>
  */
-class MandangoDocumentChoiceList extends ArrayChoiceList
+class MandangoDocumentChoiceList extends SimpleChoiceList
 {
     private $mandango;
     private $class;
