@@ -1,6 +1,6 @@
 {
-    "name": "mandango/mandango-bundle",
-    "description": "Bundle to use Mandango with Symfony2",
+    "name": "analytik/mandango-bundle",
+    "description": "Bundle to use Mandango with Symfony2 (Milan's lame fork)",
     "keywords": ["mongodb", "mandango"],
     "type": "symfony-bundle",
     "license": "MIT",
@@ -8,6 +8,10 @@
         {
             "name": "Pablo Díez",
             "email": "pablodip@gmail.com"
+        },
+        {
+            "name": "Milan Brezovsky",
+            "email": "analytiq@gmail.com"
         }
     ],
     "require": {
