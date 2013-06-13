@@ -1,6 +1,6 @@
 {
-    "name": "analytik/mandango-bundle",
-    "description": "Bundle to use Mandango with Symfony2 (Milan's lame fork)",
+    "name": "octobird/mandango-bundle",
+    "description": "Bundle to use Mandango with Symfony2 (Octobird fork)",
     "keywords": ["mongodb", "mandango"],
     "type": "symfony-bundle",
     "license": "MIT",
