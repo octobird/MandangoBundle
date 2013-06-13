@@ -7,7 +7,7 @@
 	<parameters>
 		<!-- mandango -->
 		<parameter key="mandango.class">Mandango\Mandango</parameter>
-		<parameter key="mandango.metadata_factory.class">MandangoMetadataFactory</parameter>
+		<parameter key="mandango.metadata_factory.class">Model\Mapping\MetadataFactory</parameter>
 
 		<parameter key="mandango.model_dir">%kernel.root_dir%/</parameter>
 		<parameter key="mandango.metadata_factory.output">%mandango.model_dir%</parameter>
