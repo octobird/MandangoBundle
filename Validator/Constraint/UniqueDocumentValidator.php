@@ -43,7 +43,7 @@ class UniqueDocumentValidator extends ConstraintValidator
      *
      * @return Boolean Whether or not the document is unique.
      */
-    public function isValid($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint)
     {
         $document = $this->parseDocument($value);
         $fields = $this->parseFields($constraint->fields);
@@ -53,13 +53,13 @@ class UniqueDocumentValidator extends ConstraintValidator
         $numberResults = $query->count();
 
         if (0 === $numberResults) {
-            return true;
+            return;
         }
 
         if (1 === $numberResults) {
             $result = $query->one();
             if ($result === $document) {
-                return true;
+                return;
             }
         }
 
@@ -67,7 +67,7 @@ class UniqueDocumentValidator extends ConstraintValidator
             $this->addFieldViolation($fields[0], $constraint->message);
         }
 
-        return false;
+        return;
     }
 
     private function parseDocument($document)
