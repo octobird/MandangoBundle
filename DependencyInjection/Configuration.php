@@ -11,8 +11,8 @@
 
 namespace Mandango\MandangoBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use Symfony\Component\Config\Definition\NodeInterface;
 
 /**
  * MandangoExtension configuration structure.
@@ -26,7 +26,7 @@ class Configuration
     /**
      * Generates the configuration tree.
      *
-     * @return Symfony\Component\DependencyInjection\Configuration\NodeInterface
+     * @return NodeInterface
      */
     public function getConfigTree()
     {

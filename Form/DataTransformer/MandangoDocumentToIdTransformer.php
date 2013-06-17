@@ -12,10 +12,7 @@
 namespace Mandango\MandangoBundle\Form\DataTransformer;
 
 use Mandango\MandangoBundle\Form\ChoiceList\MandangoDocumentChoiceList;
-use Symfony\Bridge\Doctrine\Form\ChoiceList\EntityChoiceList;
-use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\DataTransformer\TransformationFailedException;
 
 /**
  * MandangoDocumentToIdTransformer.

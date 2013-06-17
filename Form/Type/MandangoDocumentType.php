@@ -26,78 +26,77 @@ use Mandango\Mandango;
  */
 class MandangoDocumentType extends AbstractType
 {
-	private $mandango;
+    private $mandango;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param Mandango $mandango The mandango.
-	 */
-	public function __construct(Mandango $mandango)
-	{
-		$this->mandango = $mandango;
-	}
+    /**
+     * Constructor.
+     *
+     * @param Mandango $mandango The mandango.
+     */
+    public function __construct(Mandango $mandango)
+    {
+        $this->mandango = $mandango;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function buildForm(FormBuilderInterface $builder, array $options)
-	{
-		if ($options['multiple']) {
-			$builder
-				->addEventSubscriber(new MergeGroupListener())
-				->addViewTransformer(new MandangoDocumentsToArrayTransformer($options['choice_list']), true)
-			;
-		} else {
-			$builder->addViewTransformer(new MandangoDocumentToIdTransformer($options['choice_list']), true);
-		}
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        if ($options['multiple']) {
+            $builder
+                ->addEventSubscriber(new MergeGroupListener())
+                ->addViewTransformer(new MandangoDocumentsToArrayTransformer($options['choice_list']), true);
+        } else {
+            $builder->addViewTransformer(new MandangoDocumentToIdTransformer($options['choice_list']), true);
+        }
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getDefaultOptions(array $options)
-	{
-		$defaultOptions = array(
-			'template' => 'choice',
-			'multiple' => false,
-			'expanded' => false,
-			'mandango' => $this->mandango,
-			'class'    => null,
-			'field'    => null,
-			'query'    => null,
-			'choices'           => array(),
-			'preferred_choices' => array(),
-		);
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions(array $options)
+    {
+        $defaultOptions = array(
+            'template'          => 'choice',
+            'multiple'          => false,
+            'expanded'          => false,
+            'mandango'          => $this->mandango,
+            'class'             => null,
+            'field'             => null,
+            'query'             => null,
+            'choices'           => array(),
+            'preferred_choices' => array(),
+        );
 
-		$options = array_replace($defaultOptions, $options);
+        $options = array_replace($defaultOptions, $options);
 
-		if (!isset($options['choice_list'])) {
-			$defaultOptions['choice_list'] = new MandangoDocumentChoiceList(
-				$options['mandango'],
-				$options['class'],
-				$options['field'],
-				$options['query'],
-				$options['choices']
-			);
-		}
+        if (!isset($options['choice_list'])) {
+            $defaultOptions['choice_list'] = new MandangoDocumentChoiceList(
+                $options['mandango'],
+                $options['class'],
+                $options['field'],
+                $options['query'],
+                $options['choices']
+            );
+        }
 
-		return $defaultOptions;
-	}
+        return $defaultOptions;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getParent()
-	{
-		return 'choice';
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getParent()
+    {
+        return 'choice';
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getName()
-	{
-		return 'mandango_document';
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'mandango_document';
+    }
 }

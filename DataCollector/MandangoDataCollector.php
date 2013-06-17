@@ -29,7 +29,7 @@ class MandangoDataCollector extends DataCollector
     /**
      * Constructor.
      *
-     * @param Mandango\MandangoBundle\Logger\MandangoLogger|null $logger A mandango logger (optional).
+     * @param MandangoLogger|null $logger A mandango logger (optional).
      */
     public function __construct(MandangoLogger $logger = null)
     {

@@ -11,8 +11,8 @@
 
 namespace Mandango\MandangoBundle\Form\EventListener;
 
+use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\Event\FilterDataEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -24,10 +24,10 @@ class MergeGroupListener implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        return array(FormEvents::BIND => 'onBindNormData');
+        return array(FormEvents::SUBMIT => 'onSubmit');
     }
 
-    public function onBindNormData(FormEvent $event)
+    public function onSubmit(FormEvent $event)
     {
         $group = $event->getForm()->getData();
         $data = $event->getData();

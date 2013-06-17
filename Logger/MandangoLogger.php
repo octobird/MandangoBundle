@@ -11,7 +11,7 @@
 
 namespace Mandango\MandangoBundle\Logger;
 
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use \Psr\Log\LoggerInterface;
 
 /**
  * MandangoLogger.
@@ -26,7 +26,7 @@ class MandangoLogger
     /**
      * Constructor.
      *
-     * @param LoggerInterface|logger $logger A logger (optional).
+     * @param LoggerInterface $logger A logger (optional).
      */
     public function __construct(LoggerInterface $logger = null)
     {

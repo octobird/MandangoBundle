@@ -22,57 +22,101 @@ use Mandango\Mondator\Extension;
  */
 class DocumentValidation extends Extension
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function doClassProcess()
-	{
-		$validation = array(
-			'constraints' => array(),
-			'getters'     => array(),
-		);
+    static public function parseNodes(array $nodes)
+    {
+        $values = array();
 
-		// constraints
-		if (isset($this->configClass['validation'])) {
-			$validation['constraints'] = $this->configClass['validation'];
-		}
+        foreach ($nodes as $name => $childNodes) {
+            if (is_numeric($name) && is_array($childNodes) && count($childNodes) == 1) {
+                $options = current($childNodes);
 
-		// getters
+                if (is_array($options)) {
+                    $options = static::parseNodes($options);
+                }
 
-		// fields
-		foreach ($this->configClass['fields'] as $name => $field) {
-			if (empty($field['inherited']) && isset($field['validation']) && $field['validation']) {
-				$validation['getters'][$name] = $field['validation'];
-			}
-		}
-		// referencesOne
-		foreach ($this->configClass['referencesOne'] as $name => $referenceOne) {
-			if (empty($referenceOne['inherited']) && isset($referenceOne['validation']) && $referenceOne['validation']) {
-				$validation['getters'][$name] = $referenceOne['validation'];
-			}
-		}
-		// referencesMany
-		foreach ($this->configClass['referencesMany'] as $name => $referenceMany) {
-			if (empty($referenceMany['inherited']) && isset($referenceMany['validation']) && $referenceMany['validation']) {
-				$validation['getters'][$name] = $referenceMany['validation'];
-			}
-		}
-		// embeddedsOne
-		foreach ($this->configClass['embeddedsOne'] as $name => $embeddedOne) {
-			if (empty($embeddedOne['inherited']) && isset($embeddedOne['validation']) && $embeddedOne['validation']) {
-				$validation['getters'][$name] = $embeddedOne['validation'];
-			}
-		}
-		// embeddedsMany
-		foreach ($this->configClass['embeddedsMany'] as $name => $embeddedMany) {
-			if (empty($embeddedMany['inherited']) && isset($embeddedMany['validation']) && $embeddedMany['validation']) {
-				$validation['getters'][$name] = $embeddedMany['validation'];
-			}
-		}
+                $values[] = static::newConstraint(key($childNodes), $options);
+            } else {
+                if (is_array($childNodes)) {
+                    $childNodes = static::parseNodes($childNodes);
+                }
 
-		$validation = Dumper::exportArray($validation, 12);
+                $values[$name] = $childNodes;
+            }
+        }
 
-		$method = new Method('public', 'loadValidatorMetadata', '\Symfony\Component\Validator\Mapping\ClassMetadata $metadata', <<<EOF
+        return $values;
+    }
+
+    /*
+     * Code from Symfony\Component\Validator\Mapping\Loader\YamlFileLoader
+     */
+
+    static protected function newConstraint($name, $options)
+    {
+        if (false !== strpos($name, '\\') && class_exists($name)) {
+            $className = (string)$name;
+        } else {
+            $className = 'Symfony\\Component\\Validator\\Constraints\\' . $name;
+        }
+
+        return new $className($options);
+    }
+
+    /*
+     * Code from Symfony\Component\Validator\Mapping\Loader\FileLoader
+     */
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doClassProcess()
+    {
+        $validation = array(
+            'constraints' => array(),
+            'getters'     => array(),
+        );
+
+        // constraints
+        if (isset($this->configClass['validation'])) {
+            $validation['constraints'] = $this->configClass['validation'];
+        }
+
+        // getters
+
+        // fields
+        foreach ($this->configClass['fields'] as $name => $field) {
+            if (empty($field['inherited']) && isset($field['validation']) && $field['validation']) {
+                $validation['getters'][$name] = $field['validation'];
+            }
+        }
+        // referencesOne
+        foreach ($this->configClass['referencesOne'] as $name => $referenceOne) {
+            if (empty($referenceOne['inherited']) && isset($referenceOne['validation']) && $referenceOne['validation']) {
+                $validation['getters'][$name] = $referenceOne['validation'];
+            }
+        }
+        // referencesMany
+        foreach ($this->configClass['referencesMany'] as $name => $referenceMany) {
+            if (empty($referenceMany['inherited']) && isset($referenceMany['validation']) && $referenceMany['validation']) {
+                $validation['getters'][$name] = $referenceMany['validation'];
+            }
+        }
+        // embeddedsOne
+        foreach ($this->configClass['embeddedsOne'] as $name => $embeddedOne) {
+            if (empty($embeddedOne['inherited']) && isset($embeddedOne['validation']) && $embeddedOne['validation']) {
+                $validation['getters'][$name] = $embeddedOne['validation'];
+            }
+        }
+        // embeddedsMany
+        foreach ($this->configClass['embeddedsMany'] as $name => $embeddedMany) {
+            if (empty($embeddedMany['inherited']) && isset($embeddedMany['validation']) && $embeddedMany['validation']) {
+                $validation['getters'][$name] = $embeddedMany['validation'];
+            }
+        }
+
+        $validation = Dumper::exportArray($validation, 12);
+
+        $method = new Method('public', 'loadValidatorMetadata', '\Symfony\Component\Validator\Mapping\ClassMetadata $metadata', <<<EOF
 		\$validation = $validation;
 
 		foreach (\Mandango\MandangoBundle\Extension\DocumentValidation::parseNodes(\$validation['constraints']) as \$constraint) {
@@ -87,59 +131,18 @@ class DocumentValidation extends Extension
 
 		return true;
 EOF
-		);
-		$method->setStatic(true);
-		$method->setDocComment(<<<EOF
-	/**
+        );
+        $method->setStatic(true);
+        $method->setDocComment(
+            <<<EOF
+            	/**
 	 * Maps the validation.
 	 *
 	 * @param \Symfony\Component\Validator\Mapping\ClassMetadata \$metadata The metadata class.
 	 */
 EOF
-		);
+        );
 
-		$this->definitions['document_base']->addMethod($method);
-	}
-
-	/*
-	 * Code from Symfony\Component\Validator\Mapping\Loader\YamlFileLoader
-	 */
-	static public function parseNodes(array $nodes)
-	{
-		$values = array();
-
-		foreach ($nodes as $name => $childNodes) {
-			if (is_numeric($name) && is_array($childNodes) && count($childNodes) == 1) {
-				$options = current($childNodes);
-
-				if (is_array($options)) {
-					$options = static::parseNodes($options);
-				}
-
-				$values[] = static::newConstraint(key($childNodes), $options);
-			} else {
-				if (is_array($childNodes)) {
-					$childNodes = static::parseNodes($childNodes);
-				}
-
-				$values[$name] = $childNodes;
-			}
-		}
-
-		return $values;
-	}
-
-	/*
-	 * Code from Symfony\Component\Validator\Mapping\Loader\FileLoader
-	 */
-	static protected function newConstraint($name, $options)
-	{
-		if (false !== strpos($name, '\\') && class_exists($name)) {
-			$className = (string) $name;
-		} else {
-			$className = 'Symfony\\Component\\Validator\\Constraints\\'.$name;
-		}
-
-		return new $className($options);
-	}
+        $this->definitions['document_base']->addMethod($method);
+    }
 }

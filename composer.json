@@ -12,14 +12,24 @@
         {
             "name": "Milan Brezovsky",
             "email": "analytiq@gmail.com"
+        },
+        {
+            "name": "Segey Baykin",
+            "email": "baykin.sergey.vasilevich@gmail.com"
         }
     ],
     "require": {
         "symfony/framework-bundle": "2.*",
+        "symfony/validator": "2.*",
+        "symfony/console": "2.*",
+        "symfony/finder": "2.*",
+        "symfony/form": "2.*",
+        "symfony/security": "2.*",
         "mandango/mandango": "dev-master"
     },
     "autoload": {
         "psr-0": { "Mandango\\MandangoBundle": "" }
     },
-    "target-dir": "Mandango/MandangoBundle"
+    "target-dir": "Mandango/MandangoBundle",
+    "minimum-stability": "dev"
 }

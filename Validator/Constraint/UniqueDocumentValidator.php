@@ -28,7 +28,7 @@ class UniqueDocumentValidator extends ConstraintValidator
     private $mandango;
 
     /**
-     * @param Mandango $madnango A mandango.
+     * @param Mandango $mandango A mandango.
      */
     public function __construct(Mandango $mandango)
     {
@@ -38,8 +38,8 @@ class UniqueDocumentValidator extends ConstraintValidator
     /**
      * Validates the document uniqueness.
      *
-     * @param value      $value   The document.
-     * @param Constraint $constraint The constraint.
+     * @param \Mandango\Document\Document $value      The document.
+     * @param Constraint|UniqueDocument   $constraint The constraint.
      *
      * @return Boolean Whether or not the document is unique.
      */
@@ -64,7 +64,7 @@ class UniqueDocumentValidator extends ConstraintValidator
         }
 
         if ($this->context) {
-            $this->addFieldViolation($fields[0], $constraint->message);
+            $this->context->addViolationAt($fields[0], $constraint->message);
         }
 
         return;
@@ -123,13 +123,5 @@ class UniqueDocumentValidator extends ConstraintValidator
         }
 
         return $criteria;
-    }
-
-    private function addFieldViolation($field, $message)
-    {
-        $oldPath = $this->context->getPropertyPath();
-        $this->context->setPropertyPath(empty($oldPath) ? $field : $oldPath.'.'.$field);
-        $this->context->addViolation($message, array(), null);
-        $this->context->setPropertyPath($oldPath);
     }
 }

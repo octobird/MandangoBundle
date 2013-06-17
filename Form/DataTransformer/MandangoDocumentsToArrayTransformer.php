@@ -13,10 +13,9 @@ namespace Mandango\MandangoBundle\Form\DataTransformer;
 
 use Mandango\Group\ReferenceGroup;
 use Mandango\MandangoBundle\Form\ChoiceList\MandangoDocumentChoiceList;
-use Symfony\Bridge\Doctrine\Form\ChoiceList\EntityChoiceList;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\DataTransformer\TransformationFailedException;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
  * MandangoDocumentToArrayTransformer.

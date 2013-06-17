@@ -2,13 +2,14 @@
 
 namespace Mandango\MandangoBundle\Tests;
 
-use Mandango\Mandango;
 use Mandango\Cache\ArrayCache;
+use Mandango\Mandango;
 use Mandango\Connection;
 use Model\Mapping\Metadata;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
+    /** @var Mandango */
     protected $mandango;
 
     protected function setUp()

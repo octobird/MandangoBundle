@@ -5,16 +5,32 @@ namespace Mandango\MandangoBundle\Tests\Validator\Constraint;
 use Mandango\MandangoBundle\Tests\TestCase;
 use Mandango\MandangoBundle\Validator\Constraint\UniqueDocument;
 use Mandango\MandangoBundle\Validator\Constraint\UniqueDocumentValidator;
+use Model\Article;
+use Symfony\Component\Validator\ExecutionContext;
 
 class UniqueDocumentValidatorTest extends TestCase
 {
+    /** @var UniqueDocumentValidator */
     private $validator;
+    /** @var ExecutionContext|\PHPUnit_Framework_MockObject_MockObject */
+    protected $context;
 
     protected function setUp()
     {
         parent::setUp();
-
+        $this->context = $this->getMock('Symfony\Component\Validator\ExecutionContext', array(), array(), '', false);
         $this->validator = new UniqueDocumentValidator($this->mandango);
+        $this->validator->initialize($this->context);
+
+        $this->context->expects($this->any())
+            ->method('getClassName')
+            ->will($this->returnValue(__CLASS__));
+    }
+
+    protected function tearDown()
+    {
+        $this->context = null;
+        $this->validator = null;
     }
 
     /**
@@ -24,7 +40,7 @@ class UniqueDocumentValidatorTest extends TestCase
     public function testIsValidNotMandangoDocument($document)
     {
         $constraint = new UniqueDocument(array('fields' => array('title')));
-        $this->validator->isValid($document, $constraint);
+        $this->validator->validate($document, $constraint);
     }
 
     public function IsValidNotMandangoDocumentProvider()
@@ -38,12 +54,12 @@ class UniqueDocumentValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Validator\Exception\UnexpectedTypeException
+     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
      * @dataProvider isValidFieldsNotValidProvider
      */
     public function testIsValidFieldsNotValid($fields)
     {
-        $this->validator->isValid($this->createArticle(), $this->createConstraint($fields));
+        $this->validator->validate($this->createArticle(), $this->createConstraint($fields));
     }
 
     public function isValidFieldsNotValidProvider()
@@ -57,22 +73,22 @@ class UniqueDocumentValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException Symfony\Component\Validator\Exception\ConstraintDefinitionException
+     * @expectedException \Symfony\Component\Validator\Exception\ConstraintDefinitionException
      */
     public function testIsValidAtLeastOneField()
     {
-        $this->validator->isValid($this->createArticle(), $this->createConstraint(array()));
+        $this->validator->validate($this->createArticle(), $this->createConstraint(array()));
     }
 
     /**
-     * @expectedException Symfony\Component\Validator\Exception\UnexpectedTypeException
+     * @expectedException \Symfony\Component\Validator\Exception\UnexpectedTypeException
      * @dataProvider isValidCaseInsensitiveNotValidProvider
      */
     public function testIsValidCaseInsensitiveNotValid($caseInsensitive)
     {
         $constraint = $this->createConstraint('title');
         $constraint->caseInsensitive = $caseInsensitive;
-        $this->validator->isValid($this->createArticle(), $constraint);
+        $this->validator->validate($this->createArticle(), $constraint);
     }
 
     public function isValidCaseInsensitiveNotValidProvider()
@@ -89,20 +105,27 @@ class UniqueDocumentValidatorTest extends TestCase
     public function testIsValidWithoutResults()
     {
         $article = $this->createArticle()->setTitle('foo');
-        $this->assertTrue($this->validator->isValid($article, $this->createConstraint('title')));
+        $this->context->expects($this->never())
+            ->method('addViolationAt');
+        $this->validator->validate($article, $this->createConstraint('title'));
     }
 
     public function testIsValidSameResult()
     {
         $article = $this->createArticle()->setTitle('foo')->save();
-        $this->assertTrue($this->validator->isValid($article, $this->createConstraint('title')));
+        $this->context->expects($this->never())
+            ->method('addViolationAt');
+        $this->validator->validate($article, $this->createConstraint('title'));
     }
 
     public function testIsValidOneField()
     {
         $article1 = $this->createArticle()->setTitle('foo')->save();
         $article2 = $this->createArticle()->setTitle('foo');
-        $this->assertFalse($this->validator->isValid($article2, $this->createConstraint('title')));
+        $this->context->expects($this->once())
+            ->method('addViolationAt')
+            ->with('title', 'This value is already used.');
+        $this->validator->validate($article2, $this->createConstraint('title'));
     }
 
     public function testIsValidCaseInsensitive()
@@ -113,7 +136,11 @@ class UniqueDocumentValidatorTest extends TestCase
         $constraint = $this->createConstraint('title');
         $constraint->caseInsensitive = array('title');
 
-        $this->assertFalse($this->validator->isValid($article2, $constraint));
+        $this->context->expects($this->once())
+            ->method('addViolationAt')
+            ->with('title', 'This value is already used.');
+
+        $this->validator->validate($article2, $constraint);
     }
 
     private function createConstraint($fields)
@@ -121,6 +148,9 @@ class UniqueDocumentValidatorTest extends TestCase
         return new UniqueDocument(array('fields' => $fields));
     }
 
+    /**
+     * @return Article
+     */
     private function createArticle()
     {
         return $this->mandango->create('Model\Article');

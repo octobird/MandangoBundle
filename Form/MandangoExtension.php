@@ -11,6 +11,7 @@
 
 namespace Mandango\MandangoBundle\Form;
 
+use Mandango\MandangoBundle\Form\Type\MandangoDocumentType;
 use Symfony\Component\Form\AbstractExtension;
 
 /**
@@ -23,7 +24,7 @@ class MandangoExtension extends AbstractExtension
     protected function loadTypes()
     {
         return array(
-            new Type\MandangoDocumentType(),
+            new MandangoDocumentType(),
         );
     }
 
