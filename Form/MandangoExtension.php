@@ -11,6 +11,7 @@
 
 namespace Mandango\MandangoBundle\Form;
 
+use Mandango\Mandango;
 use Mandango\MandangoBundle\Form\Type\MandangoDocumentType;
 use Symfony\Component\Form\AbstractExtension;
 
@@ -21,15 +22,23 @@ use Symfony\Component\Form\AbstractExtension;
  */
 class MandangoExtension extends AbstractExtension
 {
+    /** @var Mandango */
+    private $mandango;
+
+    public function __construct(Mandango $mandango)
+    {
+        $this->mandango = $mandango;
+    }
+
     protected function loadTypes()
     {
         return array(
-            new MandangoDocumentType(),
+            new MandangoDocumentType($this->mandango),
         );
     }
 
     protected function loadTypeGuesser()
     {
-        return new MandangoTypeGuesser();
+        return new MandangoTypeGuesser($this->mandango->getMetadataFactory());
     }
 }

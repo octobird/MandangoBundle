@@ -59,6 +59,7 @@ class MandangoDocumentType extends AbstractType
     {
         $defaultOptions = array(
             'template'          => 'choice',
+            'property'          => null,
             'multiple'          => false,
             'expanded'          => false,
             'mandango'          => $this->mandango,
@@ -67,6 +68,7 @@ class MandangoDocumentType extends AbstractType
             'query'             => null,
             'choices'           => array(),
             'preferred_choices' => array(),
+            'group_by'          => null,
         );
 
         $options = array_replace($defaultOptions, $options);
@@ -77,7 +79,10 @@ class MandangoDocumentType extends AbstractType
                 $options['class'],
                 $options['field'],
                 $options['query'],
-                $options['choices']
+                $options['choices'],
+                $options['preferred_choices'],
+                $options['property'],
+                $options['group_by']
             );
         }
 
