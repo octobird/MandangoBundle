@@ -40,7 +40,7 @@ class MandangoDocumentChoiceList extends ObjectChoiceList
      */
     private $loaded = false;
 
-    public function __construct(Mandango $mandango, $class, $field = null, Query $query = null, array $choices = array(), $preferredChoices = array(), $labelPath = null, $groupPath = null, PropertyAccessorInterface $propertyAccessor = null)
+    public function __construct(Mandango $mandango, $class, Query $query = null, array $choices = array(), $preferredChoices = array(), $labelPath = null, $groupPath = null, PropertyAccessorInterface $propertyAccessor = null)
     {
         $this->mandango = $mandango;
         $this->class = $class;

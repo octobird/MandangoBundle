@@ -18,6 +18,8 @@ use Mandango\MandangoBundle\Form\EventListener\MergeGroupListener;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
 use Mandango\Mandango;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * MandangoDocumentType.
@@ -27,6 +29,8 @@ use Mandango\Mandango;
 class MandangoDocumentType extends AbstractType
 {
     private $mandango;
+
+    private $choiceListCache = array();
 
     /**
      * Constructor.
@@ -55,38 +59,41 @@ class MandangoDocumentType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOptions(array $options)
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $defaultOptions = array(
+        $choiceList = function (Options $options) {
+            $hash = md5(json_encode(array($options['class'], $options['query'], $options['field'])));
+            if (!isset($choiceListCache[$hash])) {
+                $choiceListCache[$hash] = new MandangoDocumentChoiceList(
+                    $options['mandango'],
+                    $options['class'],
+                    $options['query'],
+                    $options['choices'],
+                    $options['preferred_choices'],
+                    $options['property'],
+                    $options['group_by']
+                );
+            }
+
+            return $choiceListCache[$hash];
+        };
+
+        $resolver->setDefaults(array(
             'template'          => 'choice',
             'property'          => null,
             'multiple'          => false,
             'expanded'          => false,
             'mandango'          => $this->mandango,
+            'choice_list'       => $choiceList,
             'class'             => null,
             'field'             => null,
             'query'             => null,
             'choices'           => array(),
             'preferred_choices' => array(),
             'group_by'          => null,
-        );
+        ));
 
-        $options = array_replace($defaultOptions, $options);
-
-        if (!isset($options['choice_list'])) {
-            $defaultOptions['choice_list'] = new MandangoDocumentChoiceList(
-                $options['mandango'],
-                $options['class'],
-                $options['field'],
-                $options['query'],
-                $options['choices'],
-                $options['preferred_choices'],
-                $options['property'],
-                $options['group_by']
-            );
-        }
-
-        return $defaultOptions;
+        $resolver->setRequired(array('class'));
     }
 
     /**
