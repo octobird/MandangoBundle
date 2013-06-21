@@ -26,7 +26,6 @@ class MandangoDocumentChoiceList extends ObjectChoiceList
 {
     private $mandango;
     private $class;
-    private $field;
     private $query;
 
     private $documents;
@@ -44,7 +43,6 @@ class MandangoDocumentChoiceList extends ObjectChoiceList
     {
         $this->mandango = $mandango;
         $this->class = $class;
-        $this->field = $field;
         $this->query = $query;
         $this->preferredChoices = $preferredChoices;
 

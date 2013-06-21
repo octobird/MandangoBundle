@@ -12,7 +12,6 @@
 namespace Mandango\MandangoBundle\Form\Type;
 
 use Mandango\MandangoBundle\Form\ChoiceList\MandangoDocumentChoiceList;
-use Mandango\MandangoBundle\Form\DataTransformer\MandangoDocumentToIdTransformer;
 use Mandango\MandangoBundle\Form\DataTransformer\MandangoDocumentsToArrayTransformer;
 use Mandango\MandangoBundle\Form\EventListener\MergeGroupListener;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -51,8 +50,6 @@ class MandangoDocumentType extends AbstractType
             $builder
                 ->addEventSubscriber(new MergeGroupListener())
                 ->addViewTransformer(new MandangoDocumentsToArrayTransformer($options['choice_list']), true);
-        } else {
-            $builder->addViewTransformer(new MandangoDocumentToIdTransformer($options['choice_list']), true);
         }
     }
 
