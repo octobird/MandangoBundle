@@ -14,9 +14,11 @@ namespace Mandango\MandangoBundle\Form\Type;
 use Mandango\MandangoBundle\Form\ChoiceList\MandangoDocumentChoiceList;
 use Mandango\MandangoBundle\Form\DataTransformer\MandangoDocumentsToArrayTransformer;
 use Mandango\MandangoBundle\Form\EventListener\MergeGroupListener;
+use Symfony\Component\Form\Extension\Core\EventListener\MergeCollectionListener;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\AbstractType;
 use Mandango\Mandango;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -47,9 +49,13 @@ class MandangoDocumentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if ($options['multiple']) {
+            $dispatcher = $builder->getEventDispatcher();
+//            $listeners = $builder->getEventDispatcher()->getListeners();
+//            $builder->getEventDispatcher()->removeListener(FormEvents::SUBMIT, $listeners[FormEvents::SUBMIT][0]);
             $builder
-                ->addEventSubscriber(new MergeGroupListener())
-                ->addViewTransformer(new MandangoDocumentsToArrayTransformer($options['choice_list']), true);
+//                ->addEventSubscriber(new MergeGroupListener())
+//                ->addViewTransformer(new MandangoDocumentsToArrayTransformer($options['choice_list'], $options['class']), true)
+            ;
         }
     }
 
