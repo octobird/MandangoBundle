@@ -12,9 +12,11 @@
 namespace Mandango\MandangoBundle\Form\EventListener;
 
 use Mandango\Group\ReferenceGroup;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Form\Extension\Core\EventListener\MergeCollectionListener;
 
 /**
  * MergeGroupListener.
@@ -23,19 +25,27 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class MergeGroupListener implements EventSubscriberInterface
 {
+    /** @var EventDispatcherInterface  */
+    private $eventDispatcher;
+
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
     public static function getSubscribedEvents()
     {
-        return array(FormEvents::SUBMIT => 'onSubmit');
+        return array(FormEvents::SUBMIT => array('onSubmit', 10));
     }
 
     public function onSubmit(FormEvent $event)
     {
         /** @var ReferenceGroup $group */
-        $data = $event->getForm()->getData();
-        $group = $event->getData();
-
-        $group->replace($data);
-
-        $event->setData($group);
+        $group = $event->getForm()->getData();
+        $data = $event->getData();
+        if ($group instanceof ReferenceGroup) {
+            $group->replace($data);
+            $event->setData($group);
+        }
     }
 }

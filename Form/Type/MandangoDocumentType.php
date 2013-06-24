@@ -48,13 +48,13 @@ class MandangoDocumentType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if ($options['multiple']) {
+        if ($options['multiple'] && $options['reference']) {
             $dispatcher = $builder->getEventDispatcher();
-//            $listeners = $builder->getEventDispatcher()->getListeners();
-//            $builder->getEventDispatcher()->removeListener(FormEvents::SUBMIT, $listeners[FormEvents::SUBMIT][0]);
+            $listeners = $builder->getEventDispatcher()->getListeners();
+            $builder->getEventDispatcher()->removeListener(FormEvents::SUBMIT, $listeners[FormEvents::SUBMIT][0]);
             $builder
-//                ->addEventSubscriber(new MergeGroupListener())
-//                ->addViewTransformer(new MandangoDocumentsToArrayTransformer($options['choice_list'], $options['class']), true)
+                ->addEventSubscriber(new MergeGroupListener($builder->getEventDispatcher()))
+                ->addViewTransformer(new MandangoDocumentsToArrayTransformer($options['choice_list']), true)
             ;
         }
     }
@@ -85,6 +85,7 @@ class MandangoDocumentType extends AbstractType
             'template'          => 'choice',
             'property'          => null,
             'multiple'          => false,
+            'reference'          => false,
             'expanded'          => false,
             'mandango'          => $this->mandango,
             'choice_list'       => $choiceList,

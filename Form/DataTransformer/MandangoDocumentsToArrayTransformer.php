@@ -25,12 +25,10 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 class MandangoDocumentsToArrayTransformer implements DataTransformerInterface
 {
     private $choiceList;
-    private $class;
 
-    public function __construct(MandangoDocumentChoiceList $choiceList, $class)
+    public function __construct(MandangoDocumentChoiceList $choiceList)
     {
         $this->choiceList = $choiceList;
-        $this->class = $class;
     }
 
     public function transform($group)
@@ -39,42 +37,32 @@ class MandangoDocumentsToArrayTransformer implements DataTransformerInterface
             return array();
         }
 
-//        if (!$group instanceof ReferenceGroup) {
-//            throw new UnexpectedTypeException($group, 'Mandango\Group\ReferenceGroup');
-//        }
-
-        $array = array();
-        foreach ($group as $document) {
-            $array[] = (string) $document->getId();
+        if (!is_array($group) && !$group instanceof ReferenceGroup) {
+            throw new TransformationFailedException('Expected an array or ReferenceGroup.');
         }
 
-        return $array;
+        if ($group instanceof ReferenceGroup) {
+            $group = $group->getIterator()->getArrayCopy();
+        }
+
+        return $group;
     }
 
-    public function reverseTransform($array)
+    public function reverseTransform($group)
     {
-//        $documents = $this->choiceList->getDocuments();
-//
-//        $array = array();
-//        foreach ($keys as $key) {
-//            if (!isset($documents[(string) $key])) {
-//                throw new TransformationFailedException('Some Mandango document does not exist.');
-//            }
-//            $array[] = $documents[(string) $key];
-//        }
-//
-//        return $array;
 
-        if ('' === $array || null === $array) {
-            $array = array();
-        } elseif($array instanceof ReferenceGroup) {
-            $array = $array->getIterator()->getArrayCopy();
-        } else {
-            $array = (array) $array;
+        if (null === $group) {
+            return array();
         }
 
-//        $group = new ReferenceGroup($this->class);
+        if (!is_array($group) && !$group instanceof ReferenceGroup) {
+            throw new TransformationFailedException('Expected an array or ReferenceGroup.');
+        }
 
-        return $array;
+        if ($group instanceof ReferenceGroup) {
+            $group = $group->getIterator()->getArrayCopy();
+        }
+
+        return $group;
     }
 }
