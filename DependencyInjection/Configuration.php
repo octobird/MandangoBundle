@@ -93,7 +93,7 @@ class Configuration
                 ->booleanNode('connect')->end()
                 ->scalarNode('persist')->end()
                 ->scalarNode('timeout')->end()
-                ->booleanNode('replicaSet')->end()
+                ->scalarNode('replicaSet')->end()
                 ->scalarNode('username')->end()
                 ->scalarNode('password')->end()
             ->end()
