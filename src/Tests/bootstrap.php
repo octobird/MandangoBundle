@@ -1,6 +1,6 @@
 <?php
 
-$vendorDir = __DIR__.'/../vendor';
+$vendorDir = __DIR__.'/../../vendor';
 
 /** @var \Composer\Autoload\ClassLoader $loader */
 $loader = require_once $vendorDir.'/autoload.php';

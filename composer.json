@@ -28,7 +28,7 @@
         "mandango/mandango": "dev-master"
     },
     "autoload": {
-        "psr-0": { "Mandango\\MandangoBundle": "" }
+        "psr-0": { "Mandango\\MandangoBundle": "src/" }
     },
     "target-dir": "Mandango/MandangoBundle",
     "minimum-stability": "dev"
