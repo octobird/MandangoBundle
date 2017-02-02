@@ -68,6 +68,7 @@ class Configuration
                             ->scalarNode('class')->defaultValue('Mandango\Connection')->end()
                             ->scalarNode('server')->end()
                             ->scalarNode('database')->end()
+                            ->booleanNode('use_legacy_type_map')->end()
                         ->end()
                         ->append($this->addConnectionOptionsNode())
                     ->end()

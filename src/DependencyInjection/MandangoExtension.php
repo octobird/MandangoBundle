@@ -61,10 +61,18 @@ class MandangoExtension extends Extension
 
         // connections
         foreach ($config['connections'] as $name => $connection) {
+            $driverOptions = [
+                'typeMap' => [
+                    'array' => 'array',
+                    'document' => 'array',
+                    'root' => 'array',
+                ]
+            ];
             $definition = new Definition($connection['class'], array(
                 $connection['server'],
                 $connection['database'],
                 $connection['options'],
+                $connection['use_legacy_type_map'] ? $driverOptions : [],
             ));
 
             $connectionDefinitionName = sprintf('mandango.%s_connection', $name);
