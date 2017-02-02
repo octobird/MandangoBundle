@@ -4,10 +4,10 @@
 /phpunit.phar
 /phpunit.xml
 /vendor/
-/Tests/Model/Base/
-/Tests/Model/Mapping/
-/TestsProject/app/cache/
-/TestsProject/app/log/
-/TestsProject/src/Model/Base/
-/TestsProject/src/Model/Mapping/
-/TestsProject/src/Model/*/Base/
+/src/Tests/Model/Base/
+/src/Tests/Model/Mapping/
+/src/TestsProject/app/cache/
+/src/TestsProject/app/log/
+/src/TestsProject/src/Model/Base/
+/src/TestsProject/src/Model/Mapping/
+/src/TestsProject/src/Model/*/Base/
