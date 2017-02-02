@@ -30,6 +30,5 @@
     "autoload": {
         "psr-0": { "Mandango\\MandangoBundle": "src/" }
     },
-    "target-dir": "Mandango/MandangoBundle",
     "minimum-stability": "dev"
 }
