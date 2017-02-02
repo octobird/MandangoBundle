@@ -28,7 +28,7 @@
         "netom/mandango": "*"
     },
     "autoload": {
-        "psr-4": { "Mandango\\MandangoBundle": "src/" }
+        "psr-4": { "Mandango\\MandangoBundle\\": "src/" }
     },
     "minimum-stability": "dev"
 }
