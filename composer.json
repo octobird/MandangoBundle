@@ -19,10 +19,10 @@
         }
     ],
     "require": {
-        "symfony/framework-bundle": ">=2.3,<3.0",
-        "symfony/validator": ">=2.3,<3.0",
-        "symfony/console": ">=2.3,<3.0",
-        "symfony/finder": ">=2.3,<3.0",
+        "symfony/framework-bundle": "~2.8|~3.0",
+        "symfony/validator": "~2.8|~3.0",
+        "symfony/console": "~2.8|~3.0",
+        "symfony/finder": "~2.8|~3.0",
         "netom/mandango": "*"
     },
     "require-dev": {

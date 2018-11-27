@@ -7,18 +7,20 @@ use Mandango\MandangoBundle\Validator\Constraint\UniqueDocument;
 use Mandango\MandangoBundle\Validator\Constraint\UniqueDocumentValidator;
 use Model\Article;
 use Symfony\Component\Validator\ExecutionContext;
+use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
 
 class UniqueDocumentValidatorTest extends TestCase
 {
     /** @var UniqueDocumentValidator */
     private $validator;
-    /** @var ExecutionContext|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Symfony\Component\Validator\ExecutionContext|\Symfony\Component\Validator\Context\ExecutionContext|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->context = $this->createMock('Symfony\Component\Validator\ExecutionContext');
+        $contextClassName = class_exists(\Symfony\Component\Validator\ExecutionContext::class) ? \Symfony\Component\Validator\ExecutionContext::class : \Symfony\Component\Validator\Context\ExecutionContext::class;
+        $this->context = $this->createMock($contextClassName);
         $this->validator = new UniqueDocumentValidator($this->mandango);
         $this->validator->initialize($this->context);
 
@@ -106,7 +108,7 @@ class UniqueDocumentValidatorTest extends TestCase
     {
         $article = $this->createArticle()->setTitle('foo');
         $this->context->expects($this->never())
-            ->method('addViolationAt');
+            ->method('buildViolation');
         $this->validator->validate($article, $this->createConstraint('title'));
     }
 
@@ -114,7 +116,7 @@ class UniqueDocumentValidatorTest extends TestCase
     {
         $article = $this->createArticle()->setTitle('foo')->save();
         $this->context->expects($this->never())
-            ->method('addViolationAt');
+            ->method('buildViolation');
         $this->validator->validate($article, $this->createConstraint('title'));
     }
 
@@ -122,9 +124,15 @@ class UniqueDocumentValidatorTest extends TestCase
     {
         $article1 = $this->createArticle()->setTitle('foo')->save();
         $article2 = $this->createArticle()->setTitle('foo');
+
+        $builder = $this->createMock(ConstraintViolationBuilderInterface::class);
+        $builder->method('atPath')->willReturnSelf();
+
         $this->context->expects($this->once())
-            ->method('addViolationAt')
-            ->with('title', 'This value is already used.');
+            ->method('buildViolation')
+            ->with('This value is already used.')
+            ->willReturn($builder);
+
         $this->validator->validate($article2, $this->createConstraint('title'));
     }
 
@@ -136,9 +144,13 @@ class UniqueDocumentValidatorTest extends TestCase
         $constraint = $this->createConstraint('title');
         $constraint->caseInsensitive = array('title');
 
+        $builder = $this->createMock(ConstraintViolationBuilderInterface::class);
+        $builder->method('atPath')->willReturnSelf();
+
         $this->context->expects($this->once())
-            ->method('addViolationAt')
-            ->with('title', 'This value is already used.');
+            ->method('buildViolation')
+            ->with('This value is already used.')
+            ->willReturn($builder);
 
         $this->validator->validate($article2, $constraint);
     }

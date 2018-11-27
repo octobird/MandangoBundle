@@ -17,7 +17,7 @@ class MandangoLoggerTest extends \PHPUnit_Framework_TestCase
     {
         $query = array('foo' => 'bar');
 
-        $kernelLogger = $this->createMock('Symfony\Component\HttpKernel\Log\LoggerInterface');
+        $kernelLogger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $kernelLogger
             ->expects($this->once())
             ->method('info')

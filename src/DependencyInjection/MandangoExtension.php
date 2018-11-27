@@ -38,7 +38,7 @@ class MandangoExtension extends Extension
         $loader->load('mandango.xml');
 
         $processor = new Processor();
-        $configuration = new Configuration($container->getParameter('kernel.debug'));
+        $configuration = new Configuration();
         $config = $processor->process($configuration->getConfigTree(), $configs);
 
         // model_dir

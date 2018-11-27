@@ -12,7 +12,6 @@
 namespace Mandango\MandangoBundle;
 
 use Mandango\MandangoBundle\DependencyInjection\Compiler\MandangoMondatorPass;
-use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

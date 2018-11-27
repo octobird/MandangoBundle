@@ -39,9 +39,7 @@ class UniqueDocumentValidator extends ConstraintValidator
      * Validates the document uniqueness.
      *
      * @param \Mandango\Document\Document $value      The document.
-     * @param Constraint|UniqueDocument   $constraint The constraint.
-     *
-     * @return Boolean Whether or not the document is unique.
+     * @param Constraint|UniqueDocument   $constraint The constraint.=
      */
     public function validate($value, Constraint $constraint)
     {
@@ -64,10 +62,10 @@ class UniqueDocumentValidator extends ConstraintValidator
         }
 
         if ($this->context) {
-            $this->context->addViolationAt($fields[0], $constraint->message);
+            $this->context->buildViolation($constraint->message)
+                ->atPath($fields[0])
+                ->addViolation();
         }
-
-        return;
     }
 
     private function parseDocument($document)

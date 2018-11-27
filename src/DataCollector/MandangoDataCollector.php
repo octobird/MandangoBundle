@@ -36,6 +36,11 @@ class MandangoDataCollector extends DataCollector
         $this->logger = $logger;
     }
 
+    public function reset()
+    {
+        $this->data = [];
+    }
+
     /**
      * {@inheritdoc}
      */
