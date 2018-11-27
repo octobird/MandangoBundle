@@ -117,7 +117,7 @@ class UniqueDocumentValidator extends ConstraintValidator
         foreach ($fields as $field) {
             $value = $document->get($field);
             if (in_array($field, $caseInsensitive)) {
-                $value = new \MongoRegex(sprintf('/^%s$/i', $value));
+                $value = new \MongoDB\BSON\Regex(sprintf('^%s$', $value), 'i');
             }
             $criteria[$field] = $value;
         }

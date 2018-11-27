@@ -18,7 +18,7 @@ class UniqueDocumentValidatorTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->context = $this->getMock('Symfony\Component\Validator\ExecutionContext', array(), array(), '', false);
+        $this->context = $this->createMock('Symfony\Component\Validator\ExecutionContext');
         $this->validator = new UniqueDocumentValidator($this->mandango);
         $this->validator->initialize($this->context);
 

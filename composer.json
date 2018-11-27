@@ -27,8 +27,12 @@
         "symfony/security": ">=2.3,<3.0",
         "netom/mandango": "*"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^5.0"
+    },
     "autoload": {
         "psr-4": { "Mandango\\MandangoBundle\\": "src/" }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

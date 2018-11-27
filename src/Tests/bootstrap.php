@@ -3,7 +3,7 @@
 $vendorDir = __DIR__.'/../../vendor';
 
 /** @var \Composer\Autoload\ClassLoader $loader */
-$loader = require_once $vendorDir.'/autoload.php';
+$loader = require $vendorDir.'/autoload.php';
 $loader->add('Model', __DIR__);
 $loader->register();
 
@@ -30,3 +30,5 @@ $mondator->setExtensions(array(
     )),
 ));
 $mondator->process();
+
+unset($mondator);
