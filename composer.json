@@ -23,7 +23,6 @@
         "symfony/validator": ">=2.3,<3.0",
         "symfony/console": ">=2.3,<3.0",
         "symfony/finder": ">=2.3,<3.0",
-        "symfony/form": ">=2.3,<3.0",
         "netom/mandango": "*"
     },
     "require-dev": {

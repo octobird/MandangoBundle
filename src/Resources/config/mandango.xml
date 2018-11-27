@@ -25,10 +25,6 @@
 		<!-- data collector -->
 		<parameter key="mandango.data_collector.class">Mandango\MandangoBundle\DataCollector\MandangoDataCollector</parameter>
 
-		<!-- form -->
-		<parameter key="form.type.mandango_document.class">Mandango\MandangoBundle\Form\Type\MandangoDocumentType</parameter>
-		<parameter key="form.type_guesser.mandango.class">Mandango\MandangoBundle\Form\MandangoTypeGuesser</parameter>
-
 		<!-- validator -->
 		<parameter key="mandango.validator.unique_document.class">Mandango\MandangoBundle\Validator\Constraint\UniqueDocumentValidator</parameter>
 	</parameters>
@@ -61,17 +57,6 @@
 		<service id="mandango.data_collector" class="%mandango.data_collector.class%" public="false">
 			<tag name="data_collector" template="MandangoBundle:Collector:mandango" id="mandango" />
 			<argument type="service" id="mandango.logger" />
-		</service>
-
-		<!-- form -->
-		<service id="form.type.mandango_document" class="%form.type.mandango_document.class%">
-			<tag name="form.type" alias="mandango_document" />
-			<argument type="service" id="mandango" />
-		</service>
-
-		<service id="form.type_guesser.mandango" class="%form.type_guesser.mandango.class%">
-			<tag name="form.type_guesser" />
-			<argument type="service" id="mandango.metadata_factory" />
 		</service>
 
 		<!-- validator -->
